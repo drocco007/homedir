@@ -1,0 +1,5 @@
+PROFILE=X1_Carbon_EyeOne.icc
+GAMMA=1.7
+
+xcalib -gc $GAMMA /home/drocco/.local/share/icc/$PROFILE
+notify-send "Set screen color profile" "profile $PROFILE, gamma $GAMMA"

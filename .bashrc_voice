@@ -1,0 +1,9 @@
+. ~/.bashrc
+workon voice
+cd ~/source/voice/vox_linux
+
+BUS="vox localhost"
+
+history -s $BUS
+
+$BUS

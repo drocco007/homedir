@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+SOURCE="/media/drocco/NIKON D3000/DCIM/"
+
+function _exit {
+    [[ $1 != 0 ]] && echo "Exit with non-zero code $1"
+    exit $1
+}
+
+trap '_exit $?' EXIT
+
+TEMPDIR=$(mktemp -d)
+
+find "$SOURCE" -iname "*.jpg" -exec cp -av -t $TEMPDIR '{}' \+
+
+jhead -ft -autorot $TEMPDIR/*.JPG
+
+exiftool "-Filename<CreateDate" -d "/home/drocco/documents/photos/%Y_%m_%d/%Y%m%d-%H%M%S%%-c.%%e" $TEMPDIR
+
+rm -fr $TEMPDIR
+
+find "$SOURCE" -iname "*.jpg" -delete
