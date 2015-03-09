@@ -1,0 +1,4 @@
+# Custom styles
+gtk-font-name = "Ubuntu 10"
+gtk-theme-name = "Greybird"
+gtk-icon-theme-name = "Humanity"
