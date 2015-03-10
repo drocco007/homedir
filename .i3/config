@@ -4,7 +4,7 @@
 
 set $mod Mod4
 
-font pango:Ubuntu Mono 10
+font pango:Ubuntu Condensed 10
 
 # smaller borders & no titles
 new_window 1pixel
@@ -27,6 +27,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+x exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -fn "Ubuntu Mono" -i'
 bindsym $mod+a exec i3-msg "[window_role=main] focus"
 bindsym $mod+s exec i3-msg "[class=Sublime] focus"
+bindsym $mod+d exec i3-msg "[class=jetbrains-pycharm] focus"
 bindsym $mod+f exec i3-msg "[class=Chromium] focus"
 bindsym $mod+j exec i3-msg "[window_role=main] focus" && tmux select-window -t 0
 bindsym $mod+k exec i3-msg "[window_role=main] focus" && tmux select-window -t 1
@@ -150,6 +151,9 @@ bar {
 # Show main terminal fullscreen
 # changing this default for now…
 # for_window [window_role=main] fullscreen
+
+assign [class="Gitk"] → 8
+for_window [class="Gitk"] workspace 8
 
 
 #
