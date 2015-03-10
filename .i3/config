@@ -155,6 +155,8 @@ bar {
 assign [class="Gitk"] → 8
 for_window [class="Gitk"] workspace 8
 
+for_window [class="^Spotify.*$"] floating enable
+
 
 #
 # startup applications
