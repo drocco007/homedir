@@ -1,0 +1,5 @@
+#!/bin/bash
+
+i3-msg "workspace 9; append_layout /home/drocco/.i3/workspace-voice.json"
+VBoxManage startvm "Windows XP Voice"
+xfce4-terminal --working-directory /home/drocco/source/voice/vox_linux --title 'Linux/Dragon Voice Bridge' -e 'bash --rcfile ~/.bashrc_voice '
