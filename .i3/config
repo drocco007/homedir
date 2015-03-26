@@ -160,6 +160,7 @@ assign [class="Gitk"] → 8
 for_window [class="Gitk"] workspace 8
 
 for_window [class="^Spotify.*$"] floating enable
+for_window [class="^Pavucontrol$"] floating enable border normal
 
 
 #
