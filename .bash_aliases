@@ -34,7 +34,13 @@ alias gl='git log --all --graph --decorate'
 #
 
 ,set_client() {
-    export CLIENT=$1
+    if [ -z $1 ];
+    then
+        unset CLIENT
+    else
+        export CLIENT=$1
+    fi
+
     echo echo $CLIENT > ~/.tmux_client.sh
     tmux refresh-client -S
 }
