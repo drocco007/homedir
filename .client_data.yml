@@ -1,0 +1,11 @@
+NHA:
+  docker_image: nha
+  db_container: nha_db
+  db: nha_data
+  db_user: nha_user
+
+CIDQ:
+  database: cidq_data
+
+test:
+  db_container: test_db

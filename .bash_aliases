@@ -26,3 +26,15 @@ alias tmux='tmux -2'
 # git aliases
 
 alias gl='git log --all --graph --decorate'
+
+
+#
+# set the active client, which adjusts the behavior of certain commands
+# (e.g. ,snapdb)
+#
+
+,set_client() {
+    export CLIENT=$1
+    echo echo $CLIENT > ~/.tmux_client.sh
+    tmux refresh-client -S
+}
