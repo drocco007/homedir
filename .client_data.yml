@@ -9,3 +9,8 @@ CIDQ:
 
 test:
   db_container: test_db
+
+whitefield:
+  db_container: whitefield
+  db_user: whitefield
+  db: whitefield

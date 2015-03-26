@@ -1,0 +1,13 @@
+#!/bin/bash
+
+. ~/bin/lib/client.sh
+
+read_client_data $1
+
+client_value CONTAINER db_container
+client_value USER db_user
+client_value DB db
+
+HOST=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' $CONTAINER)
+
+pgcli -h $HOST $DB $USER
