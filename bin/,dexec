@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+. ~/bin/lib/client.sh
+
+read_client_data
+
+client_value CONTAINER db_container
+
+docker exec -it $CONTAINER $@
