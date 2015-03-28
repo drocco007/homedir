@@ -36,7 +36,7 @@ process_event(yaml_event_t *event, const char *client_key,
             if (event->type == YAML_SCALAR_EVENT &&
                     strcmp(value, client_key) == 0) {
                 printf("unset %s\n", var_name);
-                printf("declare -A %s\n", var_name);
+                printf("declare -Ag %s\n", var_name);
                 status = FIND_MAPPING;
             }
 

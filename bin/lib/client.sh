@@ -1,5 +1,3 @@
-. ~/bin/lib/yaml.sh
-
 check_client() {
     if [[ -z "$CLIENT" && -z "$1" ]]
     then
@@ -20,16 +18,5 @@ check_client() {
 
 read_client_data() {
     check_client $1
-    eval $(parse_yaml ~/.client_data.yml CLIENT_DATA)
-}
-
-client_value() {
-    if [ -z ${CLIENT_DATA[${CLIENT}[$2]]} ]
-    then
-        echo "No such client ($CLIENT) or key ($2)!"
-        exit -1
-    fi
-
-    local result="${CLIENT_DATA[${CLIENT}[$2]]}"
-    eval $1="'$result'"
+    eval $(~/bin/lib/parse_client_data ~/.client_data.yml $CLIENT CLIENT_DATA | tr '\n' ';')
 }

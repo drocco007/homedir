@@ -4,9 +4,9 @@
 
 read_client_data $1
 
-client_value CONTAINER db_container
-client_value USER db_user
-client_value DB db
+CONTAINER=${CLIENT_DATA[db_container]}
+USER=${CLIENT_DATA[db_user]}
+DB=${CLIENT_DATA[db]}
 
 HOST=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' $CONTAINER)
 

@@ -6,6 +6,6 @@ set -e
 
 read_client_data
 
-client_value CONTAINER db_container
+CONTAINER=${CLIENT_DATA[container]}
 
 docker exec -it $CONTAINER $@

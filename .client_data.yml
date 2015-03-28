@@ -1,5 +1,6 @@
 NHA:
   docker_image: nha
+  container: nha_server
   db_container: nha_db
   db: nha_data
   db_user: nha_user
@@ -11,6 +12,7 @@ test:
   db_container: test_db
 
 whitefield:
+  container: whitefield
   db_container: whitefield
   db_user: whitefield
   db: whitefield
