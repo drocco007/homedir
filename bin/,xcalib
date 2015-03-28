@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PROFILE=X1_Carbon_EyeOne.icc
 GAMMA=1.7
 
