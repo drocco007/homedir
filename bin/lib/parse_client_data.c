@@ -19,13 +19,17 @@ typedef enum status_e {
 } status_t;
 
 
-void
+int
 process_event(yaml_event_t *event, const char *client_key,
               const char * var_name)
 {
     static status_t status = FIND_CLIENT;
     static char key[4096];
     const char *value = (char *)event->data.scalar.value;
+
+    if (event->type == YAML_STREAM_END_EVENT) {
+        return 1;
+    }
 
     switch(status) {
         case FIND_CLIENT:
@@ -56,6 +60,7 @@ process_event(yaml_event_t *event, const char *client_key,
                 status = (status == FIND_KEY) ? FIND_VALUE : FIND_KEY;
             } else if (event->type == YAML_MAPPING_END_EVENT) {
                 status = IGNORE_ALL;
+                return 1;
             }
 
             break;
@@ -63,6 +68,8 @@ process_event(yaml_event_t *event, const char *client_key,
         case IGNORE_ALL:
             break;
     }
+
+    return 0;
 }
 
 
@@ -99,11 +106,7 @@ main(int argc, char *argv[])
             break;
         }
 
-        process_event(&input_event, client_key, var_name);
-
-        if (input_event.type == YAML_STREAM_END_EVENT) {
-            done = 1;
-        }
+        done = process_event(&input_event, client_key, var_name);
     }
 
     yaml_parser_delete(&parser);
