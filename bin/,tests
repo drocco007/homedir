@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+. ~/bin/lib/client.sh
+
+read_client_data $1
+
+RUNTESTS=${CLIENT_DATA[runtests]}
+
+i3-msg resize shrink width 1 px or 25 ppt
+
+$RUNTESTS

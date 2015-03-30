@@ -6,7 +6,11 @@ NHA:
   db_user: nha_user
 
 CIDQ:
-  database: cidq_data
+  docker_image: cidq
+  container: cidq_server
+  db_container: cidq_db
+  db: cidq_data
+  db_user: cidq_user
 
 test:
   db_container: test_db
@@ -16,3 +20,4 @@ whitefield:
   db_container: whitefield
   db_user: whitefield
   db: whitefield
+  runtests: ~/source/whitefield/runtests.sh
