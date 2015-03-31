@@ -8,6 +8,12 @@ read_client_data $1
 
 RUNTESTS=${CLIENT_DATA[runtests]}
 
+if [ -z "$RUNTESTS" ]
+then
+    echo "Invalid client ($CLIENT) or no test configuration found!"
+    exit -1
+fi
+
 i3-msg resize shrink width 1 px or 25 ppt
 
 $RUNTESTS

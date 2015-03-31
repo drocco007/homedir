@@ -11,6 +11,7 @@ CIDQ:
   db_container: cidq_db
   db: cidq_data
   db_user: cidq_user
+  runtests: ~/source/brightlink/runtests.sh
 
 test:
   db_container: test_db
