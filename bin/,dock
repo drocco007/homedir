@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+    echo "usage: $0 <command> [args]"
+    exit -1
+fi
+
+
+. ~/bin/lib/client.sh
+
+read_client_data
+
+
+CONTAINER=${CLIENT_DATA[container]}
+
+
+COMMAND=$1
+shift
+
+case "$COMMAND" in
+    exec )
+
+        docker exec -it $CONTAINER $@
+        ;;
+
+    logs )
+        tmux rename-window "$LOWER_CLIENT logs"
+        while true
+        do
+            docker attach --sig-proxy=false $CONTAINER \
+                | grep -E --color 'blcore.events|$'
+
+            sleep 2
+        done
+        ;;
+
+    * )
+
+        echo "Unknown command: $COMMAND"
+        ;;
+esac
