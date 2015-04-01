@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 . ~/bin/lib/client.sh
 
 read_client_data $1
@@ -14,6 +12,6 @@ then
     exit -1
 fi
 
-i3-msg resize shrink width 1 px or 25 ppt
+i3-msg resize shrink width 1 px or 25 ppt > /dev/null 2&>1
 
 $RUNTESTS
