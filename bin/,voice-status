@@ -1,0 +1,3 @@
+#!/bin/bash
+
+~/.envs/voice/bin/python -m vox.tools.win_spy
