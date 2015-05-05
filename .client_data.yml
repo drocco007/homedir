@@ -13,6 +13,14 @@ CIDQ:
   db_user: cidq_user
   runtests: ~/source/brightlink/runtests.sh
 
+NASM:
+  docker_image: nasm
+  container: nasm_server
+  db_container: nasm_db
+  db: nasm_data
+  db_user: nasm_user
+  runtests: ~/source/brightlink/runtests.sh
+
 test:
   db_container: test_db
 
