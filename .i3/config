@@ -171,7 +171,7 @@ exec /home/drocco/bin/,xcalib
 
 exec --no-startup-id nm-applet
 exec --no-startup-id indicator-cpufreq
-#exec --no-startup-id indicator-cpufreq
+exec --no-startup-id xset r rate 240 40
 
 exec --no-startup-id i3-msg 'exec xfce4-terminal --role=main -e "tmux -2"; workspace 2; exec subl; workspace 1'
 #exec --no-startup-id i3-msg 'exec xfce4-terminal --role=main -e "tmux -2"; workspace 2; exec subl; workspace 3; exec chromium-browser; workspace 1'
