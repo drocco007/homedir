@@ -29,10 +29,10 @@ bindsym $mod+a exec i3-msg "[window_role=main] focus"
 bindsym $mod+s exec i3-msg "[class=Sublime] focus"
 bindsym $mod+d exec i3-msg "[class=jetbrains-pycharm] focus"
 bindsym $mod+f exec i3-msg "[class=Chromium] focus"
-bindsym $mod+j exec i3-msg "[window_role=main] focus" && tmux select-window -t 0
-bindsym $mod+k exec i3-msg "[window_role=main] focus" && tmux select-window -t 1
-bindsym $mod+l exec i3-msg "[window_role=main] focus" && tmux select-window -t 2
-bindsym $mod+semicolon exec i3-msg "[window_role=main] focus" && tmux select-window -t 3
+bindsym $mod+j exec i3-msg "[window_role=main] focus" && tmux select-window -t '$0:0'
+bindsym $mod+k exec i3-msg "[window_role=main] focus" && tmux select-window -t '$0:1'
+bindsym $mod+l exec i3-msg "[window_role=main] focus" && tmux select-window -t '$0:2'
+bindsym $mod+semicolon exec i3-msg "[window_role=main] focus" && tmux select-window -t '$0:3'
 
 # change focus
 bindsym $mod+Left focus left
