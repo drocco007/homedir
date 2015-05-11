@@ -133,7 +133,7 @@ bindsym $mod+r mode "resize"
 # FIXME: this keybinding never reaches the wm…
 bindsym XF86Sleep exec i3lock
 
-bindsym XF86ScreenSaver exec i3lock && dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
+bindsym XF86ScreenSaver exec i3lock -i ~/.i3/lockscreen.png && dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend
 
 bindsym Print exec xfce4-screenshooter -f
 bindsym Mod1+Print exec xfce4-screenshooter -w
