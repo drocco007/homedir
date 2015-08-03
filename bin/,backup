@@ -18,14 +18,36 @@ then
 
     check_target
 
-    rsync -ar --progress "$SOURCE" "$TARGET"
+    rsync -a --progress "$SOURCE" "$TARGET"
 
+elif [[ "$1" == "mount" || "$1" == "m" ]]
+then
+    echo Mounting encrypted backup filesystem
+
+    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img
+
+    # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_a_non-root_file_system#Loop_device
+    sudo losetup -f "$TARGET"
+    sudo cryptsetup open /dev/loop1 backup
+    sudo mount /dev/mapper/backup /media/drocco/backup
+elif [[ "$1" == "umount" || "$1" == "u" ]]
+then
+    echo Unmounting encrypted backup filesystem
+
+    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img
+
+    sudo umount /media/drocco/backup
+    sudo cryptsetup close backup
+    sudo losetup -d /dev/loop1
 elif [[ "$1" == "docs" || "$1" == "d" ]]
 then
     echo Backing up documents
 
     TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/jenny_passport/dan_photos/
+
+    # http://www.mikerubel.org/computers/rsync_snapshots/#Incremental
+    rsync -a --delete --progress --exclude-from /home/drocco/.rsync-excludes --link-dest /media/drocco/backup/home.0 ~/ home/
 else
-    echo usage: "$(basename $0) [(d)ocs|(p)hotos]"
+    echo usage: "$(basename $0) [(d)ocs|(p)hotos|(m)ount|(u)mount]"
     exit -1
 fi
