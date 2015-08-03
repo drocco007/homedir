@@ -13,6 +13,7 @@ read_client_data
 
 
 CONTAINER=${CLIENT_DATA[container]}
+DB_CONTAINER=${CLIENT_DATA[db_container]}
 
 
 COMMAND=$1
@@ -33,6 +34,14 @@ case "$COMMAND" in
 
             sleep 2
         done
+        ;;
+
+    ip )
+        docker  inspect -f '{{.NetworkSettings.IPAddress}}' $CONTAINER
+        ;;
+
+    dbip )
+        docker  inspect -f '{{.NetworkSettings.IPAddress}}' $DB_CONTAINER
         ;;
 
     * )
