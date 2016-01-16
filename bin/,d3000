@@ -17,7 +17,7 @@ find "$SOURCE" -iname "*.jpg" -exec cp -av -t $TEMPDIR '{}' \+
 
 jhead -ft -autorot $TEMPDIR/*.JPG
 
-exiftool "-Filename<CreateDate" -d "/home/drocco/documents/photos/%Y_%m_%d/%Y%m%d-%H%M%S%%-c.%%e" $TEMPDIR
+exiftool "-Filename<CreateDate" -d "/home/drocco/documents/photos/%Y_%m/%Y%m%d-%H%M%S%%-c.%%e" $TEMPDIR
 
 rm -fr $TEMPDIR
 
