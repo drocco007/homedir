@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/bin/su drocco -c "DISPLAY=:0 i3lock -i /home/drocco/.i3/lockscreen.png >/home/drocco/.i3/i3lock.log 2>&1" && echo mem > /sys/power/state
