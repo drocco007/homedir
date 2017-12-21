@@ -2,4 +2,11 @@
 
 # http://monoinfinito.wordpress.com/2013/07/23/a-random-slideshow-in-ubuntu/
 
-feh $HOME/documents/photos/ --fullscreen --slideshow-delay 5 --recursive --randomize --auto-zoom --draw-filename --image-bg black
+if [[ -n "$@" ]]
+then
+    SOURCE="$@"
+else
+    SOURCE=$HOME/documents/photos/
+fi
+
+feh --fullscreen --slideshow-delay 5 --recursive --randomize --auto-zoom --draw-filename --image-bg black $SOURCE
