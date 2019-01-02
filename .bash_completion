@@ -1,3 +1,8 @@
 # the silver searcher
 [[ -r $HOME/usr/share/the_silver_searcher/completions/ag.bashcomp.sh ]] && \
     . $HOME/usr/share/the_silver_searcher/completions/ag.bashcomp.sh
+
+
+# aws cli
+[[ -r $HOME/bin/envs/aws/bin/aws_bash_completer ]] && \
+    . $HOME/bin/envs/aws/bin/aws_bash_completer
