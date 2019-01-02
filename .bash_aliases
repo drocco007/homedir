@@ -25,8 +25,9 @@ alias tmux='tmux -2'
 
 # git aliases
 
-alias gl='git log --all --graph --decorate'
-
+alias gl='git log --graph --decorate'
+alias gla='git log --all --graph --decorate'
+alias grup='git remote update -p'
 
 #
 # set the active client, which adjusts the behavior of certain commands
