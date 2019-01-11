@@ -1,3 +1,9 @@
 #!/bin/bash
 
-docker run --rm -it postgres psql $@
+bind=""
+
+if file_arg=$(echo "$@" | grep -oP '(?<=-f )[^[:space:]]+'); then
+    bind="-v $(realpath ${file_arg}):/${file_arg}"
+fi
+
+docker run --rm -it ${bind} --user 1000:1000 postgres $(basename $0) "$@"
