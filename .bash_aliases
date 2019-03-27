@@ -27,6 +27,7 @@ alias tmux='tmux -2'
 
 alias gl='git log --graph --decorate'
 alias gla='git log --all --graph --decorate'
+alias glb='git log --graph --decorate --patch master^..'  # patch view of this branch
 alias grup='git remote update -p'
 
 #
