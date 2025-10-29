@@ -37,8 +37,10 @@ list_notes () {
     done
 
     _find_cmd () {
-        CWD="$SOURCE" fd '\.(txt|md|org)$' -E site-packages
+        fd '\.(txt|md|org)$' -E site-packages -I
     }
+
+    pushd "$SOURCE" >/dev/null
 
     if [ "$limit" ] ; then
         _find_cmd | xargs ls -1clt 2>/dev/null | head -n "$limit"
@@ -46,6 +48,8 @@ list_notes () {
         _find_cmd | xargs ls -1clt
     fi | \
         cut -c34-
+
+    popd >/dev/null
 }
 
 
