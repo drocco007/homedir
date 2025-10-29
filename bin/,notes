@@ -1,0 +1,62 @@
+#!/bin/bash
+
+SOURCE=~/documents/notes/
+
+usage="$0 [<command>] [<args>]
+
+Available commands:
+
+list    show notes in reverse chronological order. Aliases: l, ls
+
+        Args:
+
+            -a|--all    show all notes, not the first 25
+            -n|--lines  show a specific number of notes
+
+"
+
+
+list_notes () {
+    limit=25
+    ls_flags="-1c"
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -a|--all)
+                unset limit
+                shift
+                ;;
+            -n|--lines)
+                limit="$2"
+                shift 2
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+
+    _find_cmd () {
+        CWD="$SOURCE" fd '\.(txt|md|org)$' -E site-packages
+    }
+
+    if [ "$limit" ] ; then
+        _find_cmd | xargs ls -1clt 2>/dev/null | head -n "$limit"
+    else
+        _find_cmd | xargs ls -1clt
+    fi | \
+        cut -c34-
+}
+
+
+case $1 in
+    l|ls|list|'')
+        list_notes $@
+        ;;
+    h|help|-h|--help)
+        1>&2 echo "$usage"
+        ;;
+    *)
+        1>&2 echo "$usage"
+        ;;
+esac
