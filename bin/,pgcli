@@ -13,4 +13,5 @@ HOST=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' $CONTAINER)
 EXE=$(basename $0)
 EXE=${EXE:1}
 
-$EXE -h $HOST $@ $DB $USER
+echo $EXE -h $HOST $@ $DB $USER
+$EXE -h $HOST "$@" $DB $USER

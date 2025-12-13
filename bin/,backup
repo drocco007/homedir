@@ -1,5 +1,8 @@
 #!/bin/bash
 
+MOUNT="/media/drocco/Seagate Backup Plus"
+MOUNT="/media/drocco/sda1-ata-WDC_PC_SN730_SDB"
+
 function check_target() {
     if [ ! -d "$TARGET" ]
     then
@@ -14,40 +17,121 @@ then
     echo Backing up photos
 
     SOURCE=~/documents/photos/
-    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/jenny_passport/dan_photos/
+    TARGET="$MOUNT/jenny_passport/dan_photos/"
 
     check_target
 
-    rsync -a --progress "$SOURCE" "$TARGET"
+    rsync -a --progress --delete "$SOURCE" "$TARGET"
 
 elif [[ "$1" == "mount" || "$1" == "m" ]]
 then
-    echo Mounting encrypted backup filesystem
-
-    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img
+    # Encrypted volume created with
+    #
+    # % dd if=/dev/zero of=/media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img bs=1 count=0 seek=500GB
+    # % sudo losetup /dev/loop1 /media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img
+    # % sudo cryptsetup -s 512 -h sha512 luksFormat /dev/loop1
+    # % sudo cryptsetup open /dev/loop1 backup
+    # % sudo zpool create -f -m /media/drocco/backup backup /dev/mapper/backup
+    #
 
     # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_a_non-root_file_system#Loop_device
-    sudo losetup -f "$TARGET"
-    sudo cryptsetup open /dev/loop1 backup
-    sudo mount /dev/mapper/backup /media/drocco/backup
+    # https://wiki.archlinux.org/index.php/Sparse_file
+
+    # echo Mounting encrypted backup filesystem
+
+    # TARGET="$MOUNT/backup/drocco@aletheia/backup.img"
+    # TARGET="$MOUNT/backup.img"
+
+    # sudo losetup -f "$TARGET"
+    # sudo cryptsetup open /dev/loop1 backup
+    # sudo zpool import backup
+
+    # gocryptfs -ro -one-file-system -reverse -exclude-from .gocryptfs.ignore . /media/drocco/backup/
+    :
 elif [[ "$1" == "umount" || "$1" == "u" ]]
 then
-    echo Unmounting encrypted backup filesystem
+    # echo Unmounting encrypted backup filesystem
 
-    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/backup/drocco@aletheia/backup.img
+    # sudo zfs unmount backup
+    # sudo zpool export backup
+    # sudo cryptsetup close backupls -c1 /media/backup/aletheia/home/.snapshots
+    # sudo losetup -d /dev/loop1
 
-    sudo umount /media/drocco/backup
-    sudo cryptsetup close backup
-    sudo losetup -d /dev/loop1
+    # umount /media/drocco/backup
+    :
 elif [[ "$1" == "docs" || "$1" == "d" ]]
 then
     echo Backing up documents
 
-    TARGET=/media/drocco/Seagate\ Backup\ Plus\ Drive/jenny_passport/dan_photos/
+    # TARGET="$MOUNT/jenny_passport/dan_photos/"
 
-    # http://www.mikerubel.org/computers/rsync_snapshots/#Incremental
-    rsync -a --delete --progress --exclude-from /home/drocco/.rsync-excludes --link-dest /media/drocco/backup/home.0 ~/ home/
+    # cd /media/drocco/backup
+
+    # # http://www.mikerubel.org/computers/rsync_snapshots/#Incremental
+    # rsync -a --delete --progress --exclude-from /home/drocco/.rsync-excludes ~/ home/
+
+    # # backup is the ZFS pool name
+    # sudo zfs snapshot $(date +'backup@%Y.%m.%d-%H:%M')
+
+
+
+    # pushd $HOME
+
+    # gocryptfs -ro -one-file-system -reverse -exclude-from .gocryptfs.ignore . /media/drocco/backup/
+
+    # rsync -Paz --delete /media/drocco/backup/* wimsey:/media/backup/drocco/home/
+
+    # umount /media/drocco/backup
+
+    # popd
+
+    set -e
+
+    # Open a multiplex ssh connection to the backup server. This allows us to
+    # reuse a single connection for multiple ssh commands while preserving
+    # the negotiated secure channel and authentication (i.e. we only need to
+    # respond to one TOTP challenge).
+    ssh -M -N -f -o ControlPath=~/.ssh/controlmasters/%r@%h:%p wimsey
+
+    # (optional) verify that the master connection is up
+    ssh -O check -S ~/.ssh/controlmasters/%r@%h:%p wimsey
+
+    # Determine the most recent snapshot on the local machine
+    LOCAL_SNAPS=$(sudo ls -1 /home/.snapshots)
+    LOCAL_SNAP=$(echo "$LOCAL_SNAPS" | sort -n | tail -1)
+
+    # Find the latest common snapshot on the remote.
+    #
+    # comm needs alpha sort, so we sort the local/remote snaphot lists
+    # alphabetically, get the common elements, then sort _that_ list numerically
+    REMOTE_SNAPS=$(ssh -S ~/.ssh/controlmasters/%r@%h:%p wimsey "sudo ls -1 /media/backup/aletheia/home/.snapshots")
+    REMOTE_SNAP=$(comm -12 <(echo "$REMOTE_SNAPS") <(echo "$LOCAL_SNAPS") | sort -n | tail -1)
+
+    echo -e "Newest local snap: $LOCAL_SNAP\nMost recent sync'ed snap: $REMOTE_SNAP"
+
+    if [ "$LOCAL_SNAP" = "$REMOTE_SNAP" ] ; then
+        echo "nothing to do"
+    else
+        # Create a directory to hold the snapshot on the remote.
+        #
+        # Snapper — used to create, rotate, and manage snapshots locally — uses
+        # a nested directory layout that btrfs-progs and other tools do not
+        # understand. This step aligns the remote directory structure with
+        # Snapper’s layout so the send/receive call will succeed and the
+        # snapshot layouts will match.
+        ssh -S ~/.ssh/controlmasters/%r@%h:%p wimsey "sudo mkdir /media/backup/aletheia/home/.snapshots/$LOCAL_SNAP"
+
+        # Send the delta between the latest local and remote snapshots to the remote.
+        sudo btrfs send -p "/home/.snapshots/$REMOTE_SNAP/snapshot" "/home/.snapshots/$LOCAL_SNAP/snapshot" | \
+            ssh -S ~/.ssh/controlmasters/%r@%h:%p wimsey sudo btrfs receive "/media/backup/aletheia/home/.snapshots/$LOCAL_SNAP/"
+
+        # Verify (https://unix.stackexchange.com/questions/565019/how-can-i-check-if-btrfs-send-receive-worked-properly)
+        ssh -S ~/.ssh/controlmasters/%r@%h:%p wimsey sudo btrfs subvolume show /media/backup/aletheia/home/.snapshots/$REMOTE_SNAP/snapshot | egrep -o --color=always '(Received|Flags).*'
+    fi
+
+    # Close the multiplex ssh connection
+    ssh -O exit -S ~/.ssh/controlmasters/%r@%h:%p wimsey
 else
     echo usage: "$(basename $0) [(d)ocs|(p)hotos|(m)ount|(u)mount]"
-    exit -1
+    exit 1
 fi

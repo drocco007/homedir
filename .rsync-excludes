@@ -1,8 +1,0 @@
-.cache
-documents/photos
-.envs
-.vbox_vms
-.thumbnails
-.npm
-source/anaconda
-source/foss/cpython/build

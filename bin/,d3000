@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e
+# set -e
 
-SOURCE="/media/drocco/NIKON D3000/DCIM/"
+SOURCE="/media/drocco/NIKON D3100/DCIM/"
 
 function _exit {
     [[ $1 != 0 ]] && echo "Exit with non-zero code $1"
@@ -13,12 +13,13 @@ trap '_exit $?' EXIT
 
 TEMPDIR=$(mktemp -d)
 
-find "$SOURCE" -iname "*.jpg" -exec cp -av -t $TEMPDIR '{}' \+
+find "$SOURCE" \( -iname "*.jpg" -o -iname "*.nef" \) -exec cp -av -t $TEMPDIR '{}' \+
 
-jhead -ft -autorot $TEMPDIR/*.JPG
+# jhead -ft -autorot $TEMPDIR/*.JPG
+exiftran -ai $TEMPDIR/*.JPG
 
 exiftool "-Filename<CreateDate" -d "/home/drocco/documents/photos/%Y_%m/%Y%m%d-%H%M%S%%-c.%%le" $TEMPDIR
 
 rm -fr $TEMPDIR
 
-find "$SOURCE" -iname "*.jpg" -delete
+find "$SOURCE" \( -iname "*.jpg" -o -iname "*.nef" \) -delete

@@ -14,6 +14,9 @@ else umask 077
 fi
 
 
+# override the system default browser
+export BROWSER=chromium-browser
+
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -37,6 +40,4 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-export PATH=/opt/Sencha/Cmd/5.1.1.39:$PATH
-
-export SENCHA_CMD_3_0_0="/opt/Sencha/Cmd/5.1.1.39"
+export PATH="$HOME/.cargo/bin:$PATH"

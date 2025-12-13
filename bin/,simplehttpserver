@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo Host address: $(ifconfig wlan0 | grep 'inet addr' | awk '{print $2}' | cut -b6-)
+echo Host address: $(ifconfig wlp4s0 | grep 'inet addr' | awk '{print $2}' | cut -b6-)
 
-python -m SimpleHTTPServer
+/usr/bin/python -m SimpleHTTPServer

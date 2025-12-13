@@ -1,12 +1,12 @@
 [user]
-name = Daniel Rocco
-email = drocco@gmail.com
+	name = Daniel Rocco
+	email = drocco@gmail.com
 
 [remote "origin"]
 
 [core]
 autocrlf = input
-editor = subl -n -w
+editor = subl -w
 pager = less -FX -+S
 
 [gitreview]
@@ -15,7 +15,8 @@ username = drocco
 [alias]
 ci = commit -v
 co = checkout
-l = log --graph --format='%C(auto)%h %<(79,trunc)%s'
+l = log --graph --format='%C(auto)%h %d %<(79,trunc)%s'
+la = log --all --graph --format='%C(auto)%h %d %<(79,trunc)%s'
 di = diff --color
 st = status -s
 save = !sh -c 'export PREV=$(git symbolic-ref HEAD|cut -d/ -f3-) && git checkout -b "$1" && git commit --no-verify -am "$1" && git checkout "$PREV"' -
@@ -29,3 +30,6 @@ helper = cache --timeout=3600
 
 [pull]
 	rebase = true
+
+[include]
+    path = /home/drocco/source/brightlink/infrastructure/deploy_tools/blgit/git.config

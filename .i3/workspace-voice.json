@@ -3,29 +3,9 @@
     "border": "pixel",
     "floating": "auto_off",
     "geometry": {
-       "height": 520,
-       "width": 640,
-       "x": 1,
-       "y": 1
-    },
-    "name": "Windows XP Voice [Running] - Oracle VM VirtualBox",
-    "percent": 0.642542986425339,
-    "swallows": [
-       {
-         "class": "^VirtualBox$",
-         "title": "^Windows\\ XP\\ Voice.*$"
-       }
-    ],
-    "type": "con"
-}
-
-{
-    "border": "pixel",
-    "floating": "auto_off",
-    "geometry": {
        "height": 992,
        "width": 562,
-       "x": 1038,
+       "x": 0,
        "y": 0
     },
     "name": "Linux/Dragon Voice Bridge",
@@ -39,3 +19,22 @@
     "type": "con"
 }
 
+{
+    "border": "pixel",
+    "floating": "auto_off",
+    "geometry": {
+       "height": 520,
+       "width": 640,
+       "x": 563,
+       "y": 0
+    },
+    "name": "Windows XP Voice [Running] - Oracle VM VirtualBox",
+    "percent": 0.642542986425339,
+    "swallows": [
+       {
+         "class": "^VirtualBox$",
+         "title": "^Windows\\ XP\\ Voice.*$"
+       }
+    ],
+    "type": "con"
+}

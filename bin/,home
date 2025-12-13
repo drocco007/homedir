@@ -2,8 +2,10 @@
 
 if [ -d ~/.git-stowed ] ;then
     mv ~/.git-stowed ~/.git || exit 1
+    mv ~/.gitignore-stowed ~/.gitignore || exit 1
     echo Home directory version control activated
 else
     mv ~/.git ~/.git-stowed || exit 1
+    mv ~/.gitignore ~/.gitignore-stowed || exit 1
     echo Home directory version control deactivated
 fi

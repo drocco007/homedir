@@ -119,17 +119,52 @@ if ! shopt -oq posix; then
 fi
 
 export EDITOR="subl -w"
+
+# virtualenvwrapper
 export WORKON_HOME=~/.envs
-. /usr/local/bin/virtualenvwrapper.sh
+VIRTUALENVWRAPPER_PYTHON=python3
+. /home/drocco/.local/bin/virtualenvwrapper.sh
+
+# Chromium HiDPI
+export CHROMIUM_FLAGS="--force-device-scale-factor=2 --high-dpi-support=1"
 
 # Git prompt
 # GIT_PROMPT_ONLY_IN_REPO=1
 GIT_PROMPT_THEME="Custom"
 . ~/.bash-git-prompt/gitprompt.sh
 
+# For ,dock etc.
+export SOURCE_ROOT=$HOME/source/brightlink
+
+# BrightLink tools
+export BLGIT_ROOT="${SOURCE_ROOT}/infrastructure/deploy_tools/blgit"
+export PATH=$PATH:$BLGIT_ROOT/bin
+source $BLGIT_ROOT/bash-completion.sh
+
 export PYCHARM_JDK=/usr/lib/jvm/java-1.7.0-openjdk-amd64
 export _JAVA_OPTIONS="-Dsun.java2d.xrender=true"
 
-export PATH=/opt/Sencha/Cmd/5.1.1.39:$PATH
+# nodejs & npm
+export PATH=~/.npm-global/bin:$PATH
+# export NODE_PATH=
 
-export SENCHA_CMD_3_0_0="/opt/Sencha/Cmd/5.1.1.39"
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[ -f /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash ] && . /home/drocco/.npm-global/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.bash
+# tabtab source for packages
+# uninstall by removing these lines
+[ -f ~/.config/tabtab/__tabtab.bash ] && . ~/.config/tabtab/__tabtab.bash || true
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+alias claude="/home/drocco/.claude/local/claude"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

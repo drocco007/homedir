@@ -3,4 +3,5 @@
 # List the "Compose" keystrokes on a Linux laptop for when I forget how
 # to type a particular Unicode character.
 
-exec less $(locate en_US.UTF-8/Compose)
+# exec less $(locate en_US.UTF-8/Compose)
+exec less /usr/share/X11/locale/en_US.UTF-8/Compose

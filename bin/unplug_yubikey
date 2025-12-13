@@ -1,16 +1,78 @@
 #!/bin/bash
+#
+# Suspend/lock the system when the Yubikey is removed.
+#
+# Default is lock; hold left shift while removing for lock + suspend.
+#
+# Triggered by udev rule /etc/udev/rules.d/85-my.rules
 
-# Query xinput; if left shift is down lock only & do not suspend.
-KEYBOARD_ID=$(/bin/su drocco -c "DISPLAY=:0 xinput list" | awk -F '[[:blank:]=]'+ '/AT Translated/ {print $9}')
 
-/bin/su drocco -c "DISPLAY=:0 xinput query-state ${KEYBOARD_ID}" | grep "key\[50\]=down"
+drop_keys() {
+    # https://www.dalemacartney.com/2013/01/14/locking-and-unlocking-the-gnome3-session-with-a-yubikey/
+    user=drocco
 
-if [[ 0 -ne $? ]]; then
-    SUSPEND=true
-fi
+    pkill -u ${user} -SIGHUP gpg-agent
+    sudo -H -u ${user} sudo -K
+}
 
-/bin/su drocco \
-    -c "DISPLAY=:0 i3lock -i /home/drocco/.i3/lockscreen.png >/home/drocco/.i3/i3lock.log 2>&1" && \
-    if [[ -v "SUSPEND" ]]; then
-        echo mem > /sys/power/state;
+
+is_left_shift_down() {
+    /bin/su drocco -c "DISPLAY=:0 xinput query-state ${KEYBOARD_ID}" | grep "key\[50\]=down"
+}
+
+
+do_suspend() {
+    # Query xinput; if left shift is down suspend, otherwise lock only.
+    KEYBOARD_ID=$(/bin/su drocco -c "DISPLAY=:0 xinput list" | grep "AT Translated" | grep -oP '(?<=id=)\d+')
+
+    is_left_shift_down
+
+    if [[ 0 -eq $? ]]; then
+        SUSPEND=true
+
+        # 12th gen X1 Carbon wakes on keypress; wait for the shift key to be
+        # released before suspending so that the key release doesn’t wake the
+        # machine back up
+        while is_left_shift_down ; do
+            sleep 0.5
+        done
     fi
+
+    /bin/su drocco \
+        -c "DISPLAY=:0 i3lock -i /home/drocco/.i3/lockscreen.png >/home/drocco/.i3/i3lock.log 2>&1" && \
+        if [[ -v "SUSPEND" ]]; then
+            echo mem > /sys/power/state;
+        fi
+}
+
+
+# see /etc/pam.d/i3lock instead
+#
+# do_unlock() {
+#     echo do unlock >>/tmp/yubi.log
+#     # /home/drocco/.envs/pam/bin/python -c "import pam; exit(not pam.authenticate('drocco', '', service='sudo'))"
+
+#     # if [[ 0 -eq $? ]]; then
+
+#     sleep 5
+
+#     if ykman list | grep 3012251 ; then
+#         echo yup its you >>/tmp/yubi.log
+#         pkill -u drocco i3lock
+#     fi
+# }
+
+
+(
+    # debounce the event: only allow one instance of this script at a time,
+    # don't run if the yubikey is plugged in, and don't run if the screen is
+    # already locked
+    flock -n 8 || exit 0
+
+    if ! lsusb | grep -i yubi && ! ps ax | grep [i]3lock ; then
+        drop_keys
+        do_suspend
+    fi
+) 8>/tmp/yubi.lock
+
+rm /tmp/yubi.lock

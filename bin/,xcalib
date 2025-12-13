@@ -1,7 +1,15 @@
 #!/bin/bash
 
-PROFILE=X1_Carbon_EyeOne.icc
-GAMMA=1.7
+# X1 Carbon 1st Gen Settings
+# PROFILE=X1_Carbon_EyeOne.icc
+# GAMMA=1.7
+# xcalib -gc $GAMMA /home/drocco/.local/share/icc/$PROFILE
+# notify-send "Set screen color profile" "profile $PROFILE, gamma $GAMMA"
 
-xcalib -gc $GAMMA /home/drocco/.local/share/icc/$PROFILE
-notify-send "Set screen color profile" "profile $PROFILE, gamma $GAMMA"
+
+# X1 Carbon 12th Gen Settings
+GAMMA=0.7
+
+# xcalib -gc $GAMMA -alter
+xrandr --output eDP-1 --gamma $GAMMA:$GAMMA:$GAMMA
+notify-send "Set screen color profile" "gamma $GAMMA"

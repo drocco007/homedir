@@ -3,7 +3,8 @@
 bind=""
 
 if file_arg=$(echo "$@" | grep -oP '(?<=-f )[^[:space:]]+'); then
-    bind="-v $(realpath ${file_arg}):/${file_arg}"
+    bind="-v $(realpath ${file_arg}):${file_arg}"
 fi
 
-docker run --rm -it ${bind} --user 1000:1000 postgres $(basename $0) "$@"
+# docker run --rm -it -v /home/drocco/.psql_history:/.psql_history -v /tmp:/tmp ${bind} -e PGPASSWORD="${PGPASSWORD}" postgres:12 $(basename $0) "$@"
+docker run --dns 172.21.0.1 --rm -it -v /home/drocco/.psql_history:/.psql_history -v /tmp:/tmp ${bind} -e PGPASSWORD="${PGPASSWORD}" -e DOMAIN_NAME=psql postgres:14.5 $(basename $0) "$@"

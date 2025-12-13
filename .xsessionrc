@@ -1,7 +1,0 @@
-
-# Get the TouchPad ID; grep help from http://unix.stackexchange.com/a/13472
-INPUT_ID=`xinput | grep -oP '.*Synaptics TouchPad.*id=\K[[:digit:]]+'`
-
-# Set up natural scrolling;
-#   see https://bugs.chromium.org/p/chromium/issues/detail?id=582547#c14
-xinput set-prop "$INPUT_ID" "Synaptics Scrolling Distance" -114 114

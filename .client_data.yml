@@ -1,9 +1,111 @@
+ATD:
+  docker_image: atd
+  container: atd_server
+  db_container: atd_db
+  db: atd_data
+  db_user: atd_user
+  clarus_port: 6085
+  store_settings: atd.store.local_settings
+
+IBLCE:
+  docker_image: iblce
+  container: iblce_server
+  db_container: iblce_db
+  db: iblce_data
+  db_user: iblce_user
+  clarus_port: 6085
+  store_settings: iblce.store.local_settings
+
+NICET:
+  docker_image: nicet
+  container: nicet_server
+  db_container: nicet_db
+  db: nicet_data
+  db_user: nicet_user
+  clarus_port: 6085
+  store_settings: nicet.store.local_settings
+
+COCOS:
+  docker_image: cocos
+  container: cocos_server
+  db_container: cocos_db
+  db: psi_co_cos_data
+  db_user: psi_co_cos_user
+  clarus_port: 6085
+  store_settings: brighttrac_PSI_Cosmo.store.local_settings
+
+BCRSP:
+  docker_image: bcrsp
+  container: bcrsp_server
+  db_container: bcrsp_db
+  db: bcrsp_data
+  db_user: bcrsp_user
+  clarus_port: 6085
+  store_settings: bcrsp.store.local_settings
+
+BrightLink:
+  docker_image: brightlink
+  container: brightlink_server
+  db_container: brightlink_db
+  db: brightlink_data
+  db_user: brightlink_user
+  clarus_port: 6085
+  store_settings: brightlink.store.local_settings
+
+NDEB:
+  docker_image: ndeb
+  container: ndeb_server
+  db_container: ndeb_db
+  db: ndeb_data
+  db_user: ndeb_user
+  clarus_port: 6085
+  store_settings: ndeb.store.local_settings
+
+NAB:
+  docker_image: nab
+  container: nab_server
+  db_container: nab_db
+  db: nab_data
+  db_user: nab_user
+  clarus_port: 6085
+  store_settings: nab.store.local_settings
+
+NERC:
+  docker_image: nerc
+  container: nerc_server
+  db_container: nerc_db
+  db: nerc_data
+  db_user: nerc_user
+  clarus_port: 6085
+  store_settings: nerc.store.local_settings
+
+UPPCC:
+  docker_image: uppcc
+  container: uppcc_server
+  db_container: uppcc_db
+  db: uppcc_data
+  db_user: uppcc_user
+  clarus_port: 6085
+  store_settings: uppcc.store.local_settings
+
+WACOS:
+  docker_image: wacos
+  container: wacos_server
+  db_container: wacos_db
+  db: wa_cos_data
+  db_user: wa_cos_user
+  clarus_port: 6085
+  store_settings: wacos.store.local_settings
+
 NHA:
   docker_image: nha
   container: nha_server
   db_container: nha_db
   db: nha_data
   db_user: nha_user
+  clarus_port: 6085
+  store_settings: brighttrac_NHA.store.local_settings
+  runtests: ~/source/brightlink/runtests.sh
 
 CIDQ:
   docker_image: cidq
@@ -11,6 +113,18 @@ CIDQ:
   db_container: cidq_db
   db: cidq_data
   db_user: cidq_user
+  clarus_port: 6085
+  store_settings: brighttrac_CIDQ.store.local_settings
+  runtests: ~/source/brightlink/runtests.sh
+
+ECI:
+  docker_image: eci
+  container: eci_server
+  db_container: eci_db
+  db: eci_data
+  db_user: eci_user
+  clarus_port: 6085
+  store_settings: brighttrac_EnviroCert.store.local_settings
   runtests: ~/source/brightlink/runtests.sh
 
 NASM:
@@ -19,6 +133,7 @@ NASM:
   db_container: nasm_db
   db: nasm_data
   db_user: nasm_user
+  clarus_port: 6085
   runtests: ~/source/brightlink/runtests.sh
 
 test:
