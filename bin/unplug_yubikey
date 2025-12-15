@@ -38,11 +38,15 @@ do_suspend() {
         done
     fi
 
-    /bin/su drocco \
-        -c "DISPLAY=:0 i3lock -i /home/drocco/.i3/lockscreen.png >/home/drocco/.i3/i3lock.log 2>&1" && \
-        if [[ -v "SUSPEND" ]]; then
-            echo mem > /sys/power/state;
-        fi
+    # /bin/su drocco \
+    #     -c "DISPLAY=:0 i3lock -i /home/drocco/.i3/lockscreen.png >/home/drocco/.i3/i3lock.log 2>&1" && \
+
+    /usr/bin/loginctl lock-session $(/usr/bin/loginctl | awk '/drocco.*active/ {print $1}' )
+
+    # this isn't working on the 6th gen with Linux Mint, but maybe that's ok
+    if [[ -v "SUSPEND" ]]; then
+        echo mem > /sys/power/state;
+    fi
 }
 
 
@@ -69,7 +73,7 @@ do_suspend() {
     # already locked
     flock -n 8 || exit 0
 
-    if ! lsusb | grep -i yubi && ! ps ax | grep [i]3lock ; then
+    if ! lsusb | grep -i yubi ; then
         drop_keys
         do_suspend
     fi
