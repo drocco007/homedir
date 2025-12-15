@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+SOURCE="/media/drocco/FUJI X100T/DCIM/"
+SOURCE="/media/drocco/sda1-usb-SABRENT_SD_00000/DCIM/"
+
+function _exit {
+    [[ $1 != 0 ]] && echo "Exit with non-zero code $1"
+    exit $1
+}
+
+trap '_exit $?' EXIT
+
+TEMPDIR=$(mktemp -d)
+
+find "$SOURCE" \( -iname "*.jpg" -o -iname "*.raf" \) -exec cp -av -t $TEMPDIR '{}' \+
+
+# jhead -ft -autorot $TEMPDIR/*.JPG
+exiftran -ai $TEMPDIR/*.JPG
+
+exiftool '-Filename<${CreateDate}-${SequenceNumber}.%le' '-filemodifydate<createdate#' -d "/home/drocco/documents/photos/%Y_%m/%Y%m%d-%H%M%S" $TEMPDIR
+
+rm -fr $TEMPDIR
+
+find "$SOURCE" \( -iname "*.jpg" -o -iname "*.raf" \) -delete
